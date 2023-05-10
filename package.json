@@ -1,0 +1,35 @@
+{
+  "name": "backend_template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "nodemon build/server.js",
+    "db:migrate": "knex migrate:latest",
+    "db:migrate:new": "knex migrate:make",
+    "db:seed:new": "knex seed:make",
+    "db:seed": "knex seed:run",
+    "db:init": "yarn run db:migrate && yarn run db:seed",
+    "db:reset": "knex migrate:rollback --all"
+  },
+  "author": "chouchoubeignet",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.0",
+    "fast-json-stringify": "^3.1.0",
+    "fastify": "^4.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^2.4.2",
+    "nodemon": "^2.0.15",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.2",
+    "@types/node": "^18.16.3",
+    "typescript": "^5.0.4"
+  }
+}
