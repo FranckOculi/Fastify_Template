@@ -8,6 +8,7 @@ const data = {
 	server_port: parseInt(process.env.SERVER_PORT),
 	sqlite_path: process.env.SQLITE_FILENAME,
 	initial_admin_password: process.env.INITIAL_ADMIN_PASSWORD,
+	initial_user_password: process.env.INITIAL_USER_PASSWORD,
 	initial_admin_email: process.env.INITIAL_ADMIN_EMAIL,
 };
 
