@@ -14,7 +14,7 @@ app.register(userRoutes, { prefix: '/user' });
 // Run the server!
 const start = async () => {
 	try {
-		await app.listen({ port: configuration.server_port })
+		await app.listen({ port: parseInt(configuration.server_port) })
 	} catch (err) {
 		app.log.error(err)
 		process.exit(1)
