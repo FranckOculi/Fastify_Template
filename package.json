@@ -2,11 +2,12 @@
   "name": "backend_template",
   "version": "1.0.0",
   "description": "",
-  "main": "src/server.js",
+  "main": "build/server.js",
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "nodemon build/server.js",
+    "dev": "tsc -p tsconfig.json && nodemon build/server.js",
     "db:migrate": "knex migrate:latest",
     "db:migrate:new": "knex migrate:make",
     "db:seed:new": "knex seed:make",
