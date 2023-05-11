@@ -6,7 +6,7 @@ export const tokenVerification = async (req, res) => {
   if(error) return res.code(status).send({ message: error });
 
   req.headers.tokenInfo = {
-    authorization: data.id,
+    authorization: {id: data.id, access: data.access},
   };
   
   return
