@@ -2,7 +2,7 @@ import configuration from './src/config/configuration.js'
 
 export default {
 	client: 'sqlite3',
-	connection:{
+	connection: {
 		filename: configuration?.sqlite_path,
 	},
 	useNullAsDefault: true,
