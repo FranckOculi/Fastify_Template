@@ -1,15 +1,15 @@
-import fastify from 'fastify';
-import authRoutes from './src/routes/authRoutes.js';
-import userRoutes from './src/routes/userRoutes.js';
-import configuration from './src/config/configuration.js';
+import fastify from 'fastify'
+import configuration from './src/config/configuration.js'
+import authRoutes from './src/routes/authRoutes.js'
+import userRoutes from './src/routes/userRoutes.js'
 
 const app = fastify({
-  logger: true,
-});
+	logger: true,
+})
 
 // Routes managers
-app.register(authRoutes, { prefix: '/auth' });
-app.register(userRoutes, { prefix: '/user' });
+app.register(authRoutes, { prefix: '/auth' })
+app.register(userRoutes, { prefix: '/user' })
 
 // Run the server!
 const start = async () => {
