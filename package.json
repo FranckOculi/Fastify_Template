@@ -5,9 +5,7 @@
 	"main": "build/server.js",
 	"type": "module",
 	"scripts": {
-		"build": "tsc -p tsconfig.json",
 		"start": "nodemon server.js",
-		"dev": "tsc -p tsconfig.json && nodemon server.js",
 		"db:migrate": "knex migrate:latest",
 		"db:migrate:new": "knex migrate:make",
 		"db:seed:new": "knex seed:make",
