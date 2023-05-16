@@ -4,6 +4,7 @@ dotenv.config()
 
 const data = {
 	env: process.env.NODE_ENV || 'development',
+	token_secret: process.env.TOKEN_SECRET,
 	server_port: parseInt(process.env.SERVER_PORT),
 	app_url: process.env.APP_URL,
 	sqlite_path: process.env.SQLITE_FILENAME,
