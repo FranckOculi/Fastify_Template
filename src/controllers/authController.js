@@ -44,3 +44,14 @@ export const login = async (req, res) => {
 		data: dataResponse,
 	})
 }
+
+export const refresh = async (req, res) => {
+	const { error, status, data } = await refreshTokenService(req.cookies?.jwt)
+
+	if (error) return res.code(status).send({ message: error })
+
+	return res.code(200).send({
+		message: 'Authenticated with success !',
+		data,
+	})
+}
