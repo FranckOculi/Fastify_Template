@@ -13,4 +13,16 @@ export default class Token {
 		const token = jwt.sign(data, configuration.token_secret, this.options)
 		return token
 	}
+
+	static verifyToken = async (token) => {
+		let decoded
+
+		try {
+			decoded = jwt.verify(token, configuration.token_secret)
+		} catch (error) {
+			return false
+		}
+
+		return decoded
+	}
 }
