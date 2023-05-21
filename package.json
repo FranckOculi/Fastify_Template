@@ -12,7 +12,7 @@
 		"db:seed": "knex seed:run",
 		"db:init": "yarn run db:migrate && yarn run db:seed",
 		"db:reset": "knex migrate:rollback --all",
-		"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js"
+		"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch"
 	},
 	"author": "chouchoubeignet",
 	"license": "ISC",
