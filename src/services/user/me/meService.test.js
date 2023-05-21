@@ -1,6 +1,6 @@
 import { getMeService } from './meService'
 
-describe('getMeService', () => {
+describe('meService', () => {
 	it('should return an error when no user', async () => {
 		const id = 25
 		const { error, status, data } = await getMeService(id)
