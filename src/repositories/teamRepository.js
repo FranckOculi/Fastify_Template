@@ -24,3 +24,7 @@ export const createTeam = async (data) => {
 	const response = await respository.create(data)
 	return findById(response[0])
 }
+
+export const removeTeam = async (id) => {
+	return respository.remove({ where: { id }, select: teamSafeFields })
+}
