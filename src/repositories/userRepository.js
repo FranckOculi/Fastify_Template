@@ -46,6 +46,6 @@ export const updateUserPassword = async (id, password, active = false) => {
 	return repository.update({ id }, payload)
 }
 
-export const removeUser = async (params) => {
-	return repository.remove(params)
+export const removeUser = async (id) => {
+	return repository.remove({ where: { id }, select: userSafeFields })
 }
