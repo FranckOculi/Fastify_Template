@@ -299,4 +299,69 @@ describe('authController', () => {
 			})
 		})
 	})
+
+	describe('refresh', () => {
+		const tokenRefresh = Token.createToken(
+			{
+				id: newUserId,
+				email: newUser.email,
+				access: newUser.access,
+			},
+			'3d'
+		)
+		describe('Route protections', () => {
+			it('should return an error when no token', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/auth/refresh',
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+		})
+
+		describe('Route Route mandatory fields', () => {
+			it('should return an error when token not a object', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/auth/refresh',
+					cookies: { coucou: 'coucou' },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+
+			it('should return an error when token not valid', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/auth/refresh',
+					cookies: { jwt: 'coucou' },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token not valid')
+			})
+		})
+
+		describe('Routes success', () => {
+			it('should succeed', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/auth/refresh',
+					cookies: { jwt: 'Bearer ' + newUserTokenRefresh },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(200)
+				expect(body.message).toEqual('Authenticated with success !')
+				expect(body.data.user).toBe(newUserId)
+				expect(body.data.accessToken).toBeDefined()
+			})
+		})
+	})
 })
