@@ -193,4 +193,110 @@ describe('authController', () => {
 			})
 		})
 	})
+
+	describe('login', () => {
+		describe('Route protections', () => {
+			it('should return an error when no payload', async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+				})
+
+				const body = JSON.parse(response.body)
+				expect(body.statusCode).toEqual(400)
+				expect(body.error).toEqual('Bad Request')
+				expect(body.message).toEqual('body must be object')
+			})
+		})
+
+		describe('Route mandatory fields', () => {
+			it('should return an error when no email', async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+					payload: {},
+				})
+
+				const body = JSON.parse(response.body)
+				expect(body.statusCode).toEqual(400)
+				expect(body.error).toEqual('Bad Request')
+				expect(body.message).toEqual("body must have required property 'email'")
+			})
+
+			it('should return an error when no password', async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+					payload: {
+						teamId: 1,
+						displayName: 'fakeUser',
+						email: 'fakeEmail',
+					},
+				})
+
+				const body = JSON.parse(response.body)
+				expect(body.statusCode).toEqual(400)
+				expect(body.error).toEqual('Bad Request')
+				expect(body.message).toEqual(
+					"body must have required property 'password'"
+				)
+			})
+		})
+
+		describe('Route errors', () => {
+			it("should return an error when user doesn't exist", async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+					payload: fakeUser,
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual(
+					'That email and password combination is incorrect'
+				)
+			})
+
+			it("should return an error when password doesn't match", async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+					payload: { email: newUser.email, password: 'fakePassword' },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual(
+					'That email and password combination is incorrect'
+				)
+			})
+		})
+
+		describe('Route success', () => {
+			it('should succeed to login', async () => {
+				const response = await app.inject({
+					method: 'POST',
+					url: '/auth/login',
+					payload: newUser,
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(200)
+				expect(body.message).toEqual('Authenticated with success !')
+				expect(body.data.user).toEqual(newUserId)
+				expect(body.data.accessToken).toBeDefined()
+				expect(
+					response.cookies.filter((cookie) => cookie.name === 'jwt')
+				).toBeDefined()
+				expect(
+					response.cookies.filter((cookie) => cookie.httpOnly)
+				).toBeTruthy()
+				expect(
+					response.cookies.filter((cookie) => cookie.sameSite === 'None')
+				).toBeTruthy()
+				expect(response.cookies.filter((cookie) => cookie.secure)).toBeTruthy()
+			})
+		})
+	})
 })
