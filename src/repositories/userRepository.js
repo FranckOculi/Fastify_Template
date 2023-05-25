@@ -39,13 +39,6 @@ export const createUser = async (data) => {
 	return findById(response[0])
 }
 
-export const updateUserPassword = async (id, password, active = false) => {
-	const payload = { password }
-	if (active) payload.active = 1
-
-	return repository.update({ id }, payload)
-}
-
 export const removeUser = async (id) => {
 	return repository.remove({ where: { id }, select: userSafeFields })
 }
