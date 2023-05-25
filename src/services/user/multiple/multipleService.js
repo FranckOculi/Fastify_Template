@@ -1,4 +1,4 @@
-import { findAllByQuery } from '../../../repositories/userRepository'
+import { findAllByQuery } from '../../../repositories/userRepository.js'
 
 export const fetchAll = async () => {
 	const users = await findAllByQuery({
