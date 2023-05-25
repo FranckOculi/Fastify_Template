@@ -53,4 +53,10 @@ describe('createTeamService', () => {
 
 		expect(error).toBeDefined()
 	})
+
+	it('should succeed', async () => {
+		const { error, status, data } = await createTeamService(newTeam)
+
+		expect(data.name).toBe(newTeam.name)
+	})
 })
