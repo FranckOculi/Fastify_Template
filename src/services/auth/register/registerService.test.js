@@ -34,7 +34,7 @@ describe('registerService', () => {
 		const team = await findByName(newTeam.name)
 
 		if (user) await removeUser(user.id)
-		if (team) await removeTeam(user.id)
+		if (team) await removeTeam(team.id)
 	})
 
 	describe('registerUser', () => {
