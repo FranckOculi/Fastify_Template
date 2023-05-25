@@ -5,7 +5,7 @@
 	"main": "build/server.js",
 	"type": "module",
 	"scripts": {
-		"start": "nodemon server.js",
+		"start": "node server.js",
 		"db:migrate": "knex migrate:latest",
 		"db:migrate:new": "knex migrate:make",
 		"db:seed:new": "knex seed:make",
