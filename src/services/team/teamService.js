@@ -1,4 +1,4 @@
-import { createTeam } from "../../repositories/teamRepository.js"
+import { createTeam } from '../../repositories/teamRepository.js'
 
 export const createTeamService = async (data) => {
 	data.createdAt = Date.now()
@@ -6,6 +6,5 @@ export const createTeamService = async (data) => {
 
 	const response = await createTeam(data)
 
-	if (response) return { error: null, data: response }
-	return { error: response }
+	return { error: null, data: response }
 }
