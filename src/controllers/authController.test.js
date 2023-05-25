@@ -1,5 +1,5 @@
-import { registerUser } from '../services/auth/register/registerService'
 import app from '../../app'
+import { registerUser } from '../services/auth/register/registerService'
 import { findByEmail, removeUser } from '../repositories/userRepository'
 import { loginService } from '../services/auth/login/loginService'
 import Token from '../utils/Token'
@@ -22,7 +22,7 @@ describe('authController', () => {
 	let newUserId
 	let newUserTokenRefresh
 
-	beforeAll(async () => {
+	beforeEach(async () => {
 		const user = await findByEmail(newUser.email)
 
 		if (!user) await registerUser(newUser)
@@ -32,7 +32,7 @@ describe('authController', () => {
 		newUserTokenRefresh = data.refreshTokenObject.refreshToken
 	})
 
-	afterAll(async () => {
+	afterEach(async () => {
 		const user = await findByEmail(newUser.email)
 		const newAdmin = await findByEmail('newAdmin@test.fr')
 		const newUserTest = await findByEmail('newUser@test.fr')
