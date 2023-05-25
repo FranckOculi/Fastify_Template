@@ -52,4 +52,38 @@ describe('tokenService', () => {
 			expect(data.accessToken).toBeDefined()
 		})
 	})
+
+	describe('verifyTokenService', () => {
+		it('should return an error when no token', async () => {
+			const { error, status, data } = await verifyTokenService(null)
+
+			expect(status).toBe(401)
+			expect(error).toBe('Token required')
+		})
+
+		it('should return an error when is not possible to verify token', async () => {
+			try {
+				await verifyTokenService({})
+			} catch (err) {
+				expect(err.message).toBe('Unable to verify token')
+			}
+		})
+
+		it('should return an error when token not valid', async () => {
+			const { error, status, data } = await verifyTokenService(fakeTokenObject)
+
+			expect(status).toBe(401)
+			expect(error).toBe('Token not valid')
+		})
+
+		it('should succeed', async () => {
+			const { error, status, data } = await verifyTokenService(tokenObject)
+
+			expect(error).toBeNull()
+			expect(data).toBeDefined()
+			expect(data.access).toBe(tokenData.access)
+			expect(data.email).toBe(tokenData.email)
+			expect(data.id).toBe(tokenData.id)
+		})
+	})
 })
