@@ -27,7 +27,14 @@ export const getAllUsers = async (req, res) => {
 }
 
 export const updateUser = async (req, res) => {
-	const { error, status, data } = await updateUserService(req.params.id)
+	const { error, status, data } = await updateUserService(req.params.id, {
+		teamId: req.body?.teamId,
+		displayName: req.body?.displayName,
+		email: req.body?.email,
+		password: req.body?.password,
+		access: req.body?.access,
+		phone: req.body?.phone,
+	})
 
 	if (error) return res.code(status).send({ message: error })
 
