@@ -204,4 +204,90 @@ describe('userController', () => {
 			})
 		})
 	})
+
+	describe('updateUser', () => {
+		describe('Route protections', () => {
+			it('should return an error when no token object', async () => {
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/' + randomId,
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+
+			it('should return an error when no token', async () => {
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/' + randomId,
+					headers: { authorization: 'Bearer ' },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+
+			it('should return an error when token is not valid', async () => {
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/' + randomId,
+					headers: { authorization: 'Bearer ' + {} },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token not valid')
+			})
+		})
+
+		describe('Route mandatory fields', () => {
+			it('should return an error when no id in param', async () => {
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/',
+					headers: { authorization: 'Bearer ' + newUserAccessToken },
+				})
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Error token')
+			})
+		})
+
+		describe('Route errors', () => {
+			it("should return an error when user doesnt' exist", async () => {
+				await removeUser(newUserId)
+
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/' + newUserId,
+					headers: { authorization: 'Bearer ' + newUserAccessToken },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(404)
+				expect(body.message).toEqual("This user doesn't exist")
+			})
+		})
+
+		describe('Route succeed', () => {
+			it('should return an updated user', async () => {
+				const response = await app.inject({
+					method: 'PUT',
+					url: '/user/update/' + newUserId,
+					headers: { authorization: 'Bearer ' + newUserAccessToken },
+					payload: {
+						displayName: 'updated user',
+					},
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(201)
+				expect(body.message).toEqual('User updated !')
+				expect(body.data.displayName).toEqual('updated user')
+			})
+		})
+	})
 })
