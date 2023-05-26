@@ -150,4 +150,58 @@ describe('userController', () => {
 			})
 		})
 	})
+
+	describe('getAllUsers', () => {
+		describe('Route protections', () => {
+			it('should return an error when no token object', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/user/all',
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+
+			it('should return an error when no token', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/user/all',
+					headers: { authorization: 'Bearer ' },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token required')
+			})
+
+			it('should return an error when token is not valid', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/user/all',
+					headers: { authorization: 'Bearer ' + {} },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(401)
+				expect(body.message).toEqual('Token not valid')
+			})
+		})
+
+		describe('Route success', () => {
+			it('should return users data', async () => {
+				const response = await app.inject({
+					method: 'GET',
+					url: '/user/all',
+					headers: { authorization: 'Bearer ' + newUserAccessToken },
+				})
+
+				const body = JSON.parse(response.body)
+				expect(response.statusCode).toEqual(200)
+				expect(body.message).toEqual('All users')
+				expect(Array.isArray(body.data)).toBeTruthy()
+			})
+		})
+	})
 })
