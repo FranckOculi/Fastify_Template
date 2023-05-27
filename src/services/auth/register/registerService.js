@@ -17,24 +17,20 @@ export const registerUser = async (data) => {
 	const user = await findByEmail(data.email)
 	if (user) return { error: 'This email is already taken', status: 409 }
 
-	try {
-		const salt = await bcrypt.genSalt()
-		const hash = await bcrypt.hash(data.password, salt)
+	const salt = await bcrypt.genSalt()
+	const hash = await bcrypt.hash(data.password, salt)
 
-		const newUser = await createUser({
-			teamId: data.teamId,
-			displayName: data.displayName,
-			email: data.email,
-			password: hash,
-			access: data.access ?? 'staff',
-			phone: data.phone,
-			createdAt: new Date(),
-		})
+	const newUser = await createUser({
+		teamId: data.teamId,
+		displayName: data.displayName,
+		email: data.email,
+		password: hash,
+		access: data.access ?? 'staff',
+		phone: data.phone,
+		createdAt: new Date(),
+	})
 
-		return { error: null, data: newUser }
-	} catch (err) {
-		throw new Error('Unable to complete signup')
-	}
+	return { error: null, data: newUser }
 }
 
 export const registerTeam = async (data) => {
