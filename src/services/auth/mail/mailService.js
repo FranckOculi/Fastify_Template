@@ -1,5 +1,5 @@
-import Mailer from '../../../utils/Mailer'
-import WelcomeEmail from '../../../utils/mails/WelcomeEmail'
+import Mailer from '../../../utils/Mailer.js'
+import WelcomeEmail from '../../../utils/mails/WelcomeEmail.js'
 
 export const sendWelcomeEmail = async (user) => {
 	const mailer = new Mailer()
