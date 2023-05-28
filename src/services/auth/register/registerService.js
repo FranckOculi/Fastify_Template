@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+import nodemailer from 'nodemailer'
 
 import {
 	createTeam,
@@ -9,6 +10,7 @@ import {
 	createUser,
 	findByEmail,
 } from '../../../repositories/userRepository.js'
+import { sendWelcomeEmail } from '../mail/mailService.js'
 
 export const registerUser = async (data) => {
 	const team = await findById(data.teamId)
@@ -30,6 +32,14 @@ export const registerUser = async (data) => {
 		createdAt: new Date(),
 	})
 
+	const { error, status, data } = await sendWelcomeEmail(newUser)
+
+	if (error)
+		return {
+			error,
+			status,
+		}
+
 	return { error: null, data: newUser }
 }
 
@@ -41,5 +51,3 @@ export const registerTeam = async (data) => {
 
 	return { error: null, data: newTeam }
 }
-
-//!TODO Add welcome email function
