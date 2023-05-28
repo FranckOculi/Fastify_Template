@@ -32,7 +32,7 @@ export const registerUser = async (data) => {
 		createdAt: new Date(),
 	})
 
-	const { error, status, data } = await sendWelcomeEmail(newUser)
+	const { error, status } = await sendWelcomeEmail(newUser)
 
 	if (error)
 		return {
