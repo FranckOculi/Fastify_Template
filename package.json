@@ -26,6 +26,7 @@
 		"fastify": "^4.17.0",
 		"jsonwebtoken": "^8.5.1",
 		"knex": "^2.4.2",
+		"nodemailer": "^6.9.2",
 		"nodemon": "^2.0.15",
 		"sqlite3": "^5.1.6"
 	},
