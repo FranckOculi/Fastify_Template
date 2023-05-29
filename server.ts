@@ -1,4 +1,4 @@
-import App from './app.js'
+import App from './app'
 import configuration from './src/config/configuration.js'
 
 // Run the server!
