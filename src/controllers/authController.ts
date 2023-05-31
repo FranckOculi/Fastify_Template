@@ -57,7 +57,6 @@ export const login = async (
 
 export const refresh = async (
 	req: FastifyRequest<{
-		Body: Partial<User>
 		Headers: { cookies: { jwt: string } }
 	}>,
 	res: FastifyReply
