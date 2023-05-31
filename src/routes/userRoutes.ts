@@ -13,11 +13,13 @@ import {
 } from '../schemas/userSchema'
 import { tokenVerification } from '../middlewares/authenticationMiddleware'
 import { permissionVerification } from '../middlewares/permissionMiddleware'
-import { User } from 'src/types/User'
+import { User } from 'src/types/user'
+import { RequestHeaders } from 'src/types/request'
 
 async function userRoutes(fastify: FastifyInstance) {
 	fastify.route<{
-		Params: { id: number }
+		Params: { id: string }
+		Headers: RequestHeaders
 	}>({
 		method: 'GET',
 		url: '/:id',
@@ -36,7 +38,8 @@ async function userRoutes(fastify: FastifyInstance) {
 
 	fastify.route<{
 		Body: Partial<User>
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>({
 		method: 'PUT',
 		url: '/update/:id',
@@ -47,7 +50,8 @@ async function userRoutes(fastify: FastifyInstance) {
 	})
 
 	fastify.route<{
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>({
 		method: 'DELETE',
 		url: '/delete/:id',
@@ -58,7 +62,8 @@ async function userRoutes(fastify: FastifyInstance) {
 	})
 
 	fastify.route<{
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>({
 		method: 'GET',
 		url: '/me/:id',
