@@ -1,9 +1,10 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { verifyTokenService } from '../services/auth/token/tokenService'
+import { RequestHeaders } from 'src/types/request'
 
 export const tokenVerification = async (
 	req: FastifyRequest<{
-		Headers: { authorization: string }
+		Headers: RequestHeaders
 	}>,
 	res: FastifyReply
 ) => {
