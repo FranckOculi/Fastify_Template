@@ -23,7 +23,6 @@ async function authRoutes(fastify: FastifyInstance) {
 	})
 
 	fastify.route<{
-		Body: Partial<User>
 		Headers: { cookies: { jwt: string } }
 	}>({
 		method: 'GET',
