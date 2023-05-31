@@ -2,9 +2,9 @@ import fastify from 'fastify'
 import cors from '@fastify/cors'
 import cookie from '@fastify/cookie'
 
-import configuration from './src/config/configuration.js'
-import authRoutes from './src/routes/authRoutes.js'
-import userRoutes from './src/routes/userRoutes.js'
+import configuration from './src/config/configuration'
+import authRoutes from './src/routes/authRoutes'
+import userRoutes from './src/routes/userRoutes'
 
 const app = fastify({
 	logger: configuration.env === 'test' ? false : true,
