@@ -1,6 +1,6 @@
 import knex from 'knex'
 
-import knexConfiguration from '../../knexfile.js'
+import knexConfiguration from '../../knexfile'
 
 const database = knex(knexConfiguration)
 
