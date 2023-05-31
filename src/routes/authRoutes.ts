@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifySchema } from 'fastify'
 import { signUpUserSchema, loginUserSchema } from '../schemas/authSchema'
 import { signUp, login, refresh } from '../controllers/authController'
 import { User } from 'src/types/User'
@@ -24,6 +24,7 @@ async function authRoutes(fastify: FastifyInstance) {
 
 	fastify.route<{
 		Body: Partial<User>
+		Headers: { cookies: { jwt: string } }
 	}>({
 		method: 'GET',
 		url: '/refresh',
