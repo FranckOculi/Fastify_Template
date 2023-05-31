@@ -1,9 +1,10 @@
 import bcrypt from 'bcrypt'
 
-import { findByEmail } from '../../../repositories/userRepository.js'
-import Token from '../../../utils/Token.js'
+import { findByEmail } from '../../../repositories/userRepository'
+import Token from '../../../utils/Token'
+import { User } from 'src/types/User'
 
-export const loginService = async (data) => {
+export const loginService = async (data: Partial<User>) => {
 	const user = await findByEmail(data.email, [
 		'id',
 		'teamId',
