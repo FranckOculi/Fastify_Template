@@ -1,7 +1,10 @@
 import nodemailer from 'nodemailer'
-import configuration from '../config/configuration.js'
+import configuration from '../config/configuration'
+import { Mail } from 'src/types/Mail'
 
 export default class Mailer {
+	transporter: nodemailer.Transporter
+
 	constructor() {
 		this.transporter = nodemailer.createTransport({
 			host: configuration.mail_host,
@@ -17,12 +20,21 @@ export default class Mailer {
 		})
 	}
 
-	async sendMail(mail) {
+	async sendMail(mail: Mail): Promise<{
+		error: string | null
+		status: number | null
+		data: Mail | null
+	}> {
 		return new Promise((resolve, reject) => {
 			this.transporter.sendMail(mail, (error, info) => {
-				if (error) return reject(error)
+				if (error)
+					return reject({
+						error: 'Unable to send email',
+						status: 503,
+						data: mail,
+					})
 
-				return resolve(info)
+				return resolve({ error: null, status: null, data: mail })
 			})
 		})
 	}
