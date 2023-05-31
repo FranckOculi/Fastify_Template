@@ -1,7 +1,7 @@
-import { FastifyInstance, FastifySchema } from 'fastify'
+import { FastifyInstance } from 'fastify'
 import { signUpUserSchema, loginUserSchema } from '../schemas/authSchema'
 import { signUp, login, refresh } from '../controllers/authController'
-import { User } from 'src/types/User'
+import { User } from 'src/types/user'
 
 async function authRoutes(fastify: FastifyInstance) {
 	fastify.route<{
