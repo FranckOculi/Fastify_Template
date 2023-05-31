@@ -1,20 +1,24 @@
+import { FastifyInstance } from 'fastify'
 import {
 	getSingleUser,
 	getAllUsers,
 	deleteUser,
 	updateUser,
 	getMe,
-} from '../controllers/userController.js'
+} from '../controllers/userController'
 import {
 	getUserSchema,
 	deleteUserSchema,
 	updateUserSchema,
-} from '../schemas/userSchema.js'
-import { tokenVerification } from '../middlewares/authenticationMiddleware.js'
-import { permissionVerification } from '../middlewares/permissionMiddleware.js'
+} from '../schemas/userSchema'
+import { tokenVerification } from '../middlewares/authenticationMiddleware'
+import { permissionVerification } from '../middlewares/permissionMiddleware'
+import { User } from 'src/types/User'
 
-async function userRoutes(fastify, options, done) {
-	fastify.route({
+async function userRoutes(fastify: FastifyInstance) {
+	fastify.route<{
+		Params: { id: number }
+	}>({
 		method: 'GET',
 		url: '/:id',
 		schema: getUserSchema,
@@ -30,7 +34,10 @@ async function userRoutes(fastify, options, done) {
 		handler: getAllUsers,
 	})
 
-	fastify.route({
+	fastify.route<{
+		Body: Partial<User>
+		Params: { id: number }
+	}>({
 		method: 'PUT',
 		url: '/update/:id',
 		schema: updateUserSchema,
@@ -39,7 +46,9 @@ async function userRoutes(fastify, options, done) {
 		handler: updateUser,
 	})
 
-	fastify.route({
+	fastify.route<{
+		Params: { id: number }
+	}>({
 		method: 'DELETE',
 		url: '/delete/:id',
 		schema: deleteUserSchema,
@@ -48,7 +57,9 @@ async function userRoutes(fastify, options, done) {
 		handler: deleteUser,
 	})
 
-	fastify.route({
+	fastify.route<{
+		Params: { id: number }
+	}>({
 		method: 'GET',
 		url: '/me/:id',
 		schema: getUserSchema,
