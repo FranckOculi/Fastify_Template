@@ -1,15 +1,20 @@
-import { registerUser } from '../services/auth/register/registerService.js'
-import { loginService } from '../services/auth/login/loginService.js'
-import { refreshTokenService } from '../services/auth/token/tokenService.js'
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { registerUser } from '../services/auth/register/registerService'
+import { loginService } from '../services/auth/login/loginService'
+import { refreshTokenService } from '../services/auth/token/tokenService'
+import { User } from 'src/types/User'
 
-export const signUp = async (req, res) => {
+export const signUp = async (
+	req: FastifyRequest<{ Body: Partial<User> }>,
+	res: FastifyReply
+) => {
 	const { error, status, data } = await registerUser({
 		teamId: req.body.teamId,
 		displayName: req.body.displayName,
 		email: req.body.email,
 		password: req.body.password,
-		access: req.body.access,
-		phone: req.body.phone,
+		access: req.body.access || '',
+		phone: req.body.phone || '',
 	})
 
 	if (error) return res.code(status).send({ message: error })
@@ -20,7 +25,12 @@ export const signUp = async (req, res) => {
 	})
 }
 
-export const login = async (req, res) => {
+export const login = async (
+	req: FastifyRequest<{
+		Body: Partial<User>
+	}>,
+	res: FastifyReply
+) => {
 	const { error, status, data } = await loginService({
 		email: req.body.email,
 		password: req.body.password,
@@ -45,7 +55,13 @@ export const login = async (req, res) => {
 	})
 }
 
-export const refresh = async (req, res) => {
+export const refresh = async (
+	req: FastifyRequest<{
+		Body: Partial<User>
+		Headers: { cookies: { jwt: string } }
+	}>,
+	res: FastifyReply
+) => {
 	const { error, status, data } = await refreshTokenService(req.cookies?.jwt)
 
 	if (error) return res.code(status).send({ message: error })
