@@ -1,18 +1,22 @@
-import configuration from '../../config/configuration.js'
+import configuration from '../../config/configuration'
+import { User } from '../../types/User'
 
 export default class WelcomeEmail {
-	appName = 'template Fastify'
+	static appName = 'template Fastify'
+	user: Partial<User>
 
-	constructor(user) {
+	constructor(user: Partial<User>) {
 		this.user = user
 	}
 
 	getFrom() {
-		return `'Fastify Template <${configuration.mail_user}>'`
+		// return `'Fastify Template <${configuration.mail_user}>'`;
+		return `'Fastify Template <${this.user.email}>'`
 	}
 
 	getReceiver() {
-		return `${this.user.displayName} '${this.user.email}'`
+		// return `${this.user.displayName} '${this.user.email}'`;
+		return `'${configuration.mail_user}'`
 	}
 
 	getSubject() {
