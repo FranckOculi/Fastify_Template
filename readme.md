@@ -15,6 +15,7 @@ A backend starter repository.
 - install packages : yarn
 - create env file with .env.example
 - create data base structure with all datas : yarn db:init
+- build the project : yarn build
 - run server : yarn start
 
 - run test : yarn test
