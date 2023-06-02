@@ -9,9 +9,8 @@ export default class WelcomeEmail {
 		this.user = user
 	}
 
-	getFrom() {
-		// return `'Fastify Template <${configuration.mail_user}>'`;
-		return `'Fastify Template <${this.user.email}>'`
+	getFrom() {
+		return `'Fastify Template <${configuration.mail_user}>'`;
 	}
 
 	getReceiver() {
