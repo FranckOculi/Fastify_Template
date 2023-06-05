@@ -1,5 +1,5 @@
-import { Team } from 'src/types/team'
 import MigrationsRepository from '../migrations.config/MigrationsRepository'
+import { Team } from 'src/types/team'
 
 export const seed = async () => {
 	// create team if it doesn't exist
