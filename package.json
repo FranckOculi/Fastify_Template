@@ -3,17 +3,17 @@
 	"version": "1.0.0",
 	"description": "",
 	"main": "build/server.js",
-	"type": "module",
 	"scripts": {
 		"build": "tsc -p tsconfig.json",
 		"start": "node build/server.js",
-		"db:migrate": "knex --knexfile build/src/database/migrations.config/knexfile.migrations.js migrate:latest",
-		"db:migrate:new": "knex migrate:make",
-		"db:seed:new": "knex seed:make",
-		"db:seed": "knex --knexfile build/src/database/migrations.config/knexfile.migrations.js seed:run",
+		"knex:run": "knex --knexfile build/src/database/migrations.config/knexfile.migrations.js",
+		"db:migrate": "yarn run knex:run migrate:latest",
+		"db:migrate:new": "yarn run knex:run -- migrate:make",
+		"db:seed:new": "yarn run knex:run seed:make",
+		"db:seed": "yarn run knex:run seed:run",
 		"db:init": "yarn run db:migrate && yarn run db:seed",
-		"db:reset": "knex migrate:rollback --all",
-		"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch",
+		"db:reset": "yarn run knex:run migrate:rollback --all",
+		"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js ts-node/esm --watch",
 		"test-coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage"
 	},
 	"author": "chouchoubeignet",
@@ -27,18 +27,26 @@
 		"fastify": "^4.17.0",
 		"jsonwebtoken": "^8.5.1",
 		"knex": "^2.4.2",
+		"knex-migrate": "^1.7.4",
 		"nodemailer": "^6.9.2",
 		"nodemon": "^2.0.15",
-		"sqlite3": "^5.1.6"
+		"sqlite3": "^5.1.6",
+		"ts-node": "^10.9.1"
 	},
 	"devDependencies": {
 		"@babel/preset-env": "^7.21.5",
+		"@fastify/type-provider-json-schema-to-ts": "^2.2.2",
+		"@fastify/type-provider-typebox": "^3.2.0",
+		"@sinclair/typebox": "^0.28.13",
 		"@types/bcrypt": "^5.0.0",
 		"@types/jest": "^29.5.1",
 		"@types/jsonwebtoken": "^9.0.2",
+		"@types/knex": "^0.16.1",
 		"@types/node": "^18.16.3",
+		"@types/nodemailer": "^6.4.8",
 		"babel-jest": "^29.5.0",
 		"jest": "^29.5.0",
+		"ts-jest": "^29.1.0",
 		"typescript": "^5.0.4"
 	}
 }
