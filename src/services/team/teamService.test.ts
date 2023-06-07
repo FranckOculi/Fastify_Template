@@ -1,49 +1,48 @@
 import {
 	createTeam,
-	findById,
 	findByName,
 	removeTeam,
 } from '../../repositories/teamRepository'
 import { createTeamService } from './teamService'
+import { Team } from '../../types/team'
 
 describe('createTeamService', () => {
 	const newTeam = {
 		name: 'Team Test',
 		description: 'test',
-	}
+	} as Team
 	const newTeamError = {
 		name: 'Team Test',
 		description: 'test',
-	}
+	} as Team
 
-	let errorTeamId
+	let errorTeamId: number
 
 	beforeAll(async () => {
 		const teamError = await findByName(newTeamError.name)
 
 		if (!teamError) {
-			newTeamError.createdAt = Date.now()
-			newTeamError.updatedAt = Date.now()
+			newTeamError.updatedAt = new Date()
 
 			const newTeam = await createTeam(newTeamError)
-			errorTeamId = newTeam.id
+			errorTeamId = newTeam.id as number
 		}
 	})
 
 	beforeEach(async () => {
-		const team = await findByName(newTeam.name)
+		const team = <Team>await findByName(newTeam.name)
 
 		if (team) await removeTeam(team.id)
 	})
 
 	afterEach(async () => {
-		const team = await findByName(newTeam.name)
+		const team = <Team>await findByName(newTeam.name)
 
 		if (team) await removeTeam(team.id)
 	})
 
 	afterAll(async () => {
-		const teamError = await findByName(newTeamError.name)
+		const teamError = <Team>await findByName(newTeamError.name)
 
 		if (teamError) await removeTeam(newTeamError.id)
 	})
