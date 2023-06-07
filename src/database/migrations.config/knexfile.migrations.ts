@@ -1,4 +1,4 @@
-const databasePath = '../../../../.db.sqlite'
+import { databasePath } from './const'
 
 export default {
 	client: 'sqlite3',
