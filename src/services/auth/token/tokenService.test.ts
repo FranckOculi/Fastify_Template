@@ -14,7 +14,7 @@ describe('tokenService', () => {
 
 	describe('refreshTokenService', () => {
 		it('should return an error when no token', async () => {
-			const { error, status, data } = await refreshTokenService(null)
+			const { error, status, data } = await refreshTokenService('')
 
 			expect(status).toBe(401)
 			expect(error).toBe('Token required')
@@ -22,7 +22,7 @@ describe('tokenService', () => {
 
 		it('should return an error when is not possible to verify token', async () => {
 			try {
-				await refreshTokenService({})
+				await refreshTokenService({} as string)
 			} catch (err) {
 				expect(err.message).toBe('Unable to verify token')
 			}
@@ -55,7 +55,7 @@ describe('tokenService', () => {
 
 	describe('verifyTokenService', () => {
 		it('should return an error when no token', async () => {
-			const { error, status, data } = await verifyTokenService(null)
+			const { error, status, data } = await verifyTokenService('')
 
 			expect(status).toBe(401)
 			expect(error).toBe('Token required')
@@ -63,7 +63,7 @@ describe('tokenService', () => {
 
 		it('should return an error when is not possible to verify token', async () => {
 			try {
-				await verifyTokenService({})
+				await verifyTokenService({} as string)
 			} catch (err) {
 				expect(err.message).toBe('Unable to verify token')
 			}
