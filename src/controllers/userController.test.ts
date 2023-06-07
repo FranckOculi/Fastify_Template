@@ -3,6 +3,9 @@ import app from '../../app'
 import { findByEmail, removeUser } from '../repositories/userRepository'
 import { registerUser } from '../services/auth/register/registerService'
 import { loginService } from '../services/auth/login/loginService'
+import { User } from '../types/user'
+import { ServiceResponse } from '../types/service'
+import { LoginServiceResponse } from '../services/auth/login/type'
 
 describe('userController', () => {
 	const newUser = {
@@ -22,12 +25,12 @@ describe('userController', () => {
 
 	const randomId = 9999
 
-	let newUserId
-	let newUserTokenRefresh
-	let newUserAccessToken
+	let newUserId: number
+	let newUserTokenRefresh: string
+	let newUserAccessToken: string
 
-	let newAdminAccessToken
-	let newAdminId
+	let newAdminAccessToken: string
+	let newAdminId: number
 
 	beforeEach(async () => {
 		const user = await findByEmail(newUser.email)
@@ -36,20 +39,24 @@ describe('userController', () => {
 		if (!user) await registerUser(newUser)
 		if (!admin) await registerUser(newAdmin)
 
-		const { error, status, data } = await loginService(newUser)
-		newUserId = data.user
-		newUserTokenRefresh = data.refreshTokenObject.refreshToken
-		newUserAccessToken = data.accessToken
+		const { error, status, data } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newUser)
+		)
+		newUserId = data?.user as number
+		newUserTokenRefresh = data?.refreshTokenObject?.refreshToken as string
+		newUserAccessToken = data?.accessToken as string
 
-		const { data: adminData } = await loginService(newAdmin)
-		newAdminAccessToken = adminData.accessToken
-		newAdminId = adminData.user
+		const { data: adminData } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newAdmin)
+		)
+		newAdminAccessToken = adminData?.accessToken as string
+		newAdminId = adminData?.user as number
 	})
 
 	afterAll(async () => {
-		const user = await findByEmail(newUser.email)
-		const admin = await findByEmail(newAdmin.email)
-		const newUserTest = await findByEmail('newUser@test.fr')
+		const user = <User>await findByEmail(newUser.email)
+		const admin = <User>await findByEmail(newAdmin.email)
+		const newUserTest = <User>await findByEmail('newUser@test.fr')
 
 		if (user) await removeUser(user.id)
 		if (admin) await removeUser(admin.id)
@@ -251,8 +258,8 @@ describe('userController', () => {
 					headers: { authorization: 'Bearer ' + newUserAccessToken },
 				})
 				const body = JSON.parse(response.body)
-				expect(response.statusCode).toEqual(401)
-				expect(body.message).toEqual('Error token')
+				expect(response.statusCode).toEqual(400)
+				expect(body.message).toEqual('params/id must be number')
 			})
 		})
 
@@ -264,6 +271,9 @@ describe('userController', () => {
 					method: 'PUT',
 					url: '/user/update/' + newUserId,
 					headers: { authorization: 'Bearer ' + newUserAccessToken },
+					payload: {
+						displayName: 'updated user',
+					},
 				})
 
 				const body = JSON.parse(response.body)
