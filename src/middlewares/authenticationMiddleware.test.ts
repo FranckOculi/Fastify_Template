@@ -4,10 +4,13 @@ import app from '../../app'
 import { findByEmail, removeUser } from '../repositories/userRepository'
 import { loginService } from '../services/auth/login/loginService'
 import { registerUser } from '../services/auth/register/registerService'
+import { LoginServiceResponse } from '../services/auth/login/type'
+import { ServiceResponse } from '../types/service'
+import { User } from '../types/user'
 
 describe('authenticationMiddleware', () => {
-	let token
-	let userId
+	let token: string
+	let userId: number
 	const randomId = 3
 	const newUser = {
 		teamId: 2,
@@ -17,13 +20,15 @@ describe('authenticationMiddleware', () => {
 	}
 
 	beforeEach(async () => {
-		const user = await findByEmail(newUser.email)
+		const user = <User>await findByEmail(newUser.email)
 
 		if (!user) await registerUser(newUser)
 
-		const { error, status, data } = await loginService(newUser)
-		token = data.accessToken
-		userId = data.user
+		const { error, status, data } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newUser)
+		)
+		token = data?.accessToken as string
+		userId = data?.user as number
 	})
 
 	afterAll(async () => {
