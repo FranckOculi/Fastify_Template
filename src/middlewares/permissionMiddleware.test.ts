@@ -5,11 +5,16 @@ import { findByEmail, removeUser } from '../repositories/userRepository'
 import { loginService } from '../services/auth/login/loginService'
 import { registerUser } from '../services/auth/register/registerService'
 
+interface MyReply extends ReplyGenericInterface {
+	message: string
+	data: { id: number }
+}
+
 describe('authenticationMiddleware', () => {
-	let userToken
-	let userId
-	let adminToken
-	let adminId
+	let userToken: string
+	let userId: number
+	let adminToken: string
+	let adminId: number
 	const randomId = 3
 	const newUser = {
 		teamId: 2,
@@ -24,7 +29,6 @@ describe('authenticationMiddleware', () => {
 		password: 'new-admin',
 		access: 'admin',
 	}
-
 	beforeEach(async () => {
 		const user = await findByEmail(newUser.email)
 		const admin = await findByEmail(newAdmin.email)
@@ -32,13 +36,17 @@ describe('authenticationMiddleware', () => {
 		if (!user) await registerUser(newUser)
 		if (!admin) await registerUser(newAdmin)
 
-		const { data: userData } = await loginService(newUser)
-		userToken = userData.accessToken
-		userId = userData.user
+		const { data: userData } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newUser)
+		)
+		userToken = userData?.accessToken as string
+		userId = userData?.user as number
 
-		const { data: adminData } = await loginService(newAdmin)
-		adminToken = adminData.accessToken
-		adminId = adminData.user
+		const { data: adminData } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newAdmin)
+		)
+		adminToken = adminData?.accessToken as string
+		adminId = adminData?.user as number
 	})
 
 	afterAll(async () => {
@@ -53,7 +61,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + userToken },
 		})
 
-		const body = JSON.parse(response.body)
+		const body : MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('Error token')
 		expect(response.statusCode).toEqual(401)
 	})
@@ -65,7 +73,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + adminToken },
 		})
 
-		const body = JSON.parse(response.body)
+		const body : MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('User data')
 		expect(body.data.id).toEqual(randomId)
 	})
@@ -77,7 +85,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + userToken },
 		})
 
-		const body = JSON.parse(response.body)
+		const body : MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('User data')
 		expect(body.data.id).toEqual(userId)
 	})
