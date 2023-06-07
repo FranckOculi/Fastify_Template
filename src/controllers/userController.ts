@@ -6,15 +6,17 @@ import {
 	updateUserService,
 } from '../services/user/single/singleService'
 import { getMeService } from '../services/user/me/meService'
-import { User } from 'src/types/User'
+import { User } from 'src/types/user'
+import { RequestHeaders } from 'src/types/request'
 
 export const getSingleUser = async (
 	req: FastifyRequest<{
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>,
 	res: FastifyReply
 ) => {
-	const { error, status, data } = await getUserService(req.params.id)
+	const { error, status, data } = await getUserService(parseInt(req.params.id))
 
 	if (error) return res.code(status).send({ message: error })
 
@@ -24,7 +26,12 @@ export const getSingleUser = async (
 	})
 }
 
-export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
+export const getAllUsers = async (
+	req: FastifyRequest<{
+		Headers: RequestHeaders
+	}>,
+	res: FastifyReply
+) => {
 	const { error, status, data } = await fetchAll()
 
 	return res.code(200).send({
@@ -36,18 +43,22 @@ export const getAllUsers = async (req: FastifyRequest, res: FastifyReply) => {
 export const updateUser = async (
 	req: FastifyRequest<{
 		Body: Partial<User>
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>,
 	res: FastifyReply
 ) => {
-	const { error, status, data } = await updateUserService(req.params.id, {
-		teamId: req.body.teamId,
-		displayName: req.body.displayName,
-		email: req.body.email,
-		password: req.body.password,
-		access: req.body.access,
-		phone: req.body.phone,
-	})
+	const { error, status, data } = await updateUserService(
+		parseInt(req.params.id),
+		{
+			teamId: req.body.teamId,
+			displayName: req.body.displayName,
+			email: req.body.email,
+			password: req.body.password,
+			access: req.body.access,
+			phone: req.body.phone,
+		}
+	)
 
 	if (error) return res.code(status).send({ message: error })
 
@@ -59,11 +70,14 @@ export const updateUser = async (
 
 export const deleteUser = async (
 	req: FastifyRequest<{
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>,
 	res: FastifyReply
 ) => {
-	const { error, status, data } = await deleteUserService(req.params.id)
+	const { error, status, data } = await deleteUserService(
+		parseInt(req.params.id)
+	)
 
 	if (error) return res.code(status).send({ message: error })
 
@@ -72,11 +86,12 @@ export const deleteUser = async (
 
 export const getMe = async (
 	req: FastifyRequest<{
-		Params: { id: number }
+		Headers: RequestHeaders
+		Params: { id: string }
 	}>,
 	res: FastifyReply
 ) => {
-	const { error, status, data } = await getMeService(req.params.id)
+	const { error, status, data } = await getMeService(parseInt(req.params.id))
 
 	if (error) return res.code(status).send({ message: error })
 
