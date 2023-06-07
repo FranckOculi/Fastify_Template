@@ -2,9 +2,13 @@ import bcrypt from 'bcrypt'
 
 import { findByEmail } from '../../../repositories/userRepository'
 import Token from '../../../utils/Token'
-import { User } from 'src/types/User'
+import { ServiceResponse } from 'src/types/service'
+import { User } from 'src/types/user'
+import { LoginServiceResponse } from './type'
 
-export const loginService = async (data: Partial<User>) => {
+export const loginService = async (
+	data: Partial<User>
+): Promise<ServiceResponse<LoginServiceResponse>> => {
 	const user = await findByEmail(data.email, [
 		'id',
 		'teamId',
@@ -17,6 +21,7 @@ export const loginService = async (data: Partial<User>) => {
 		return {
 			error: 'That email and password combination is incorrect',
 			status: 401,
+			data: null,
 		}
 
 	const isValidPassword = await bcrypt.compare(data.password, user.password)
@@ -25,6 +30,7 @@ export const loginService = async (data: Partial<User>) => {
 		return {
 			error: 'That email and password combination is incorrect',
 			status: 401,
+			data: null,
 		}
 
 	const refreshToken = Token.createToken(
@@ -44,6 +50,7 @@ export const loginService = async (data: Partial<User>) => {
 
 	return {
 		error: null,
+		status: null,
 		data: {
 			user: user.id,
 			accessToken,
@@ -51,7 +58,7 @@ export const loginService = async (data: Partial<User>) => {
 				refreshToken,
 				options: {
 					httpOnly: true,
-					sameSite: 'None',
+					sameSite: 'Strict' as 'strict',
 					secure: true,
 					maxAge: 60 * 60 * 24 * 3,
 				},
