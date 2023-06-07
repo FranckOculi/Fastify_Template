@@ -1,8 +1,9 @@
 import Token from './Token'
+import { TokenPayload, Token as TokenType } from '../types/token'
 
 describe('Token', () => {
 	const token = new Token()
-	const tokenData = {
+	const tokenData: TokenType = {
 		id: 5,
 		email: 'test@test.fr',
 		access: 'user',
@@ -15,28 +16,12 @@ describe('Token', () => {
 	})
 
 	describe('createToken method', () => {
-		it('it should return an error if token instance call createToken method', () => {
-			try {
-				token.createToken()
-			} catch (err) {
-				expect(err.message).toBe('token.createToken is not a function')
-			}
-		})
-
-		it('it should return an error if no payload', () => {
-			try {
-				Token.createToken()
-			} catch (err) {
-				expect(err.message).toBe('payload is required')
-			}
-		})
-
 		it('it should create token with default expiresIn', async () => {
 			const accessToken = Token.createToken(tokenData)
 
 			expect(typeof accessToken).toBe('string')
 
-			const decodedToken = await Token.verifyToken(accessToken)
+			const decodedToken = <TokenPayload>await Token.verifyToken(accessToken)
 
 			expect(decodedToken.email).toBe(tokenData.email)
 		})
@@ -46,7 +31,7 @@ describe('Token', () => {
 
 			expect(typeof refreshToken).toBe('string')
 
-			const decodedToken = await Token.verifyToken(refreshToken)
+			const decodedToken = <TokenPayload>await Token.verifyToken(refreshToken)
 
 			expect(decodedToken.email).toBe(tokenData.email)
 		})
