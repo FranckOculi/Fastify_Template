@@ -1,5 +1,3 @@
-import fastJson from 'fast-json-stringify'
-
 const bodyJsonSchemaUpdate = {
 	type: 'object',
 	properties: {
@@ -7,7 +5,7 @@ const bodyJsonSchemaUpdate = {
 		displayName: { type: 'string', minLength: 5, maxLength: 25 },
 		email: { type: 'string', maxLength: 50 },
 		password: { type: 'string', maxLength: 50 },
-		phone: { type: 'number', minLength: 10, maxLength: 10 },
+		phone: { type: 'string', minLength: 10, maxLength: 10 },
 		imageUrl: { type: 'string', maxLength: 80 },
 	},
 }
@@ -28,7 +26,7 @@ export const deleteUserSchema = {
 	params: paramsJsonSchema,
 }
 
-export const updateUserSchema = fastJson({
+export const updateUserSchema = {
 	body: bodyJsonSchemaUpdate,
 	params: paramsJsonSchema,
-})
+}
