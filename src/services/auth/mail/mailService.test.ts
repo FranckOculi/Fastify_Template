@@ -4,6 +4,7 @@ import {
 	removeUser,
 } from '../../../repositories/userRepository'
 import { sendWelcomeEmail } from './mailService'
+import { User } from '../../../types/user'
 
 describe('mailService', () => {
 	const newUser = {
@@ -20,14 +21,14 @@ describe('mailService', () => {
 	})
 
 	afterAll(async () => {
-		const user = await findByEmail(newUser.email)
+		const user = <User>await findByEmail(newUser.email)
 
 		if (user) removeUser(user.id)
 	})
 
 	describe('sendWelcomeEmail', () => {
 		it('should return an error when no user', async () => {
-			const { error, status, data } = await sendWelcomeEmail()
+			const { error, status, data } = await sendWelcomeEmail(null)
 
 			expect(status).toBe(503)
 			expect(error).toBe('Unable to send an email')
@@ -53,8 +54,7 @@ describe('mailService', () => {
 			const { error, status, data } = await sendWelcomeEmail(newUser)
 
 			expect(error).toBeNull()
-			expect(data.accepted[0]).toBe(newUser.email)
-			expect(data.envelope.to[0]).toBe(newUser.email)
+			expect(data.to).toBe(newUser.email)
 		})
 	})
 })
