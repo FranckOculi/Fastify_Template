@@ -6,9 +6,12 @@ import {
 
 import { registerUser } from '../../auth/register/registerService'
 import { findByEmail } from '../../../repositories/userRepository'
+import { removeUser } from '../../../repositories/userRepository'
+import { User } from '../../../types/user'
 
 describe('singleService', () => {
 	let user
+
 	const newUser = {
 		teamId: 2,
 		displayName: 'new-user',
@@ -17,13 +20,21 @@ describe('singleService', () => {
 	}
 
 	beforeEach(async () => {
-		user = await registerUser(newUser)
-		if (user.error) {
-			user = await findByEmail(newUser.email)
+		const { error, data } = await registerUser(newUser)
+		if (error) {
+			user = <User>await findByEmail(newUser.email)
+		} else {
+			user = data as User
 		}
 	})
 
-	const fakeId = 25
+	afterAll(async () => {
+		const userWithId = <User>await findByEmail(newUser.email)
+
+		if (userWithId) await removeUser(userWithId.id)
+	})
+
+	const fakeId = 9999
 
 	describe('getUserService', () => {
 		it('should return an error when no user', async () => {
@@ -49,6 +60,7 @@ describe('singleService', () => {
 			expect(status).toBe(404)
 			expect(error).toBe("This user doesn't exist")
 		})
+
 		it('should succeed', async () => {
 			const { error, status, data } = await updateUserService(user.id, newData)
 
@@ -63,13 +75,16 @@ describe('singleService', () => {
 			expect(status).toBe(404)
 			expect(error).toBe("This user doesn't exist")
 		})
+
 		it('should succeed', async () => {
 			const { error, status, data } = await deleteUserService(user.id)
-			const deleteUser = await findByEmail(newUser.email)
 
 			expect(data).toBeNull()
 			expect(error).toBeNull()
-			expect(deleteUser).toBeUndefined()
+
+			const deleteUser = await getUserService(user.id)
+
+			expect(deleteUser.error).toBe("This user doesn't exist")
 		})
 	})
 })
