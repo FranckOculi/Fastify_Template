@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { registerUser } from '../services/auth/register/registerService'
 import { loginService } from '../services/auth/login/loginService'
 import { refreshTokenService } from '../services/auth/token/tokenService'
-import { User } from 'src/types/User'
+import { User } from 'src/types/user'
 
 export const signUp = async (
 	req: FastifyRequest<{ Body: Partial<User> }>,
