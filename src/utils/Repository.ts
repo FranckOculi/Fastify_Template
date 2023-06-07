@@ -1,22 +1,6 @@
 import db from '../database/connection'
-import { Tables } from 'src/types/Tables'
-
-export type Params = {
-	select?: string[]
-	where?: { [key: string]: string | number }
-	whereIn?: { key: string; value: number[] }
-	whereNotIn?: { key: string; value: number[] }
-	orWhere?: { [key: string]: string }
-	whereRaw?: boolean
-	limit?: number
-	offset?: number
-	orderBy?: string
-}
-
-export type Options = {
-	first?: boolean
-	remove?: boolean
-}
+import { Tables } from 'src/types/tables'
+import { Options, Params } from 'src/types/repository'
 
 export default class Repository {
 	table: keyof typeof Tables
@@ -38,7 +22,7 @@ export default class Repository {
 			orderBy,
 		}: Params,
 		opts: Options = null
-	): Promise<TODO> {
+	): Promise<T> {
 		const request = db(this.table)
 
 		if (select) request.select(select)
@@ -55,7 +39,7 @@ export default class Repository {
 		if (opts?.first) request.first()
 		if (opts?.remove) request.del()
 
-		return request
+		return request as T
 	}
 
 	findOne = async function Promise<T>(params: Params): Promise<T> {
@@ -69,20 +53,25 @@ export default class Repository {
 	find = async function Promise<T>(query: Params['where']): Promise<T[]> {
 		return db(this.table).where(query)
 	}
+
 	findSimpleOne = async function Promise<T>(
 		query: Params['where']
 	): Promise<T> {
 		return db(this.table).where(query).first()
 	}
+
 	create = async function Promise<T>(data: T) {
 		return db(this.table).insert(data)
 	}
+
 	update = async function Promise<T>(query: Params['where'], data: T) {
 		return db(this.table).where(query).update(data)
 	}
+
 	destroy = async (query: Params['where']): Promise<number> => {
 		return db(this.table).where(query).del()
 	}
+
 	getDB = () => {
 		return db(this.table)
 	}
