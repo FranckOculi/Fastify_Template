@@ -3,39 +3,45 @@ import { registerUser } from '../services/auth/register/registerService'
 import { findByEmail, removeUser } from '../repositories/userRepository'
 import { loginService } from '../services/auth/login/loginService'
 import Token from '../utils/Token'
+import { User } from '../types/user'
+import { ServiceResponse } from '../types/service'
+import { LoginServiceResponse } from '../services/auth/login/type'
 
+jest.useFakeTimers()
 describe('authController', () => {
 	const fakeUser = {
 		teamId: 999,
 		displayName: 'fakeUser_authController',
 		email: `fakeUser_authController@test.com`,
 		password: 'fakeUser',
-	}
+	} as User
 
 	const newUser = {
 		teamId: 2,
 		displayName: 'new-authController',
 		email: `new-user_authController@test.com`,
 		password: 'new-user',
-	}
+	} as User
 
-	let newUserId
-	let newUserTokenRefresh
+	let newUserId: number
+	let newUserTokenRefresh: string
 
 	beforeEach(async () => {
-		const user = await findByEmail(newUser.email)
+		const user = <User>await findByEmail(newUser.email)
 
 		if (!user) await registerUser(newUser)
 
-		const { error, status, data } = await loginService(newUser)
-		newUserId = data.user
-		newUserTokenRefresh = data.refreshTokenObject.refreshToken
+		const { error, status, data } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(newUser)
+		)
+		newUserId = data?.user as number
+		newUserTokenRefresh = data?.refreshTokenObject.refreshToken as string
 	})
 
 	afterEach(async () => {
-		const user = await findByEmail(newUser.email)
-		const newAdmin = await findByEmail('newAdmin@test.fr')
-		const newUserTest = await findByEmail('newUser@test.fr')
+		const user = <User>await findByEmail(newUser.email)
+		const newAdmin = <User>await findByEmail('newAdmin@test.fr')
+		const newUserTest = <User>await findByEmail('newUser@test.fr')
 
 		if (user) await removeUser(user.id)
 		if (newAdmin) await removeUser(newAdmin.id)
@@ -174,6 +180,7 @@ describe('authController', () => {
 				const body = JSON.parse(response.body)
 				expect(response.statusCode).toEqual(201)
 				expect(body.message).toEqual('User added !')
+				expect(body).toEqual(1)
 				expect(body.data.email).toEqual('newAdmin@test.fr')
 				expect(body.data.access).toEqual('admin')
 			})
@@ -287,28 +294,18 @@ describe('authController', () => {
 				expect(body.data.user).toEqual(newUserId)
 				expect(body.data.accessToken).toBeDefined()
 				expect(
-					response.cookies.filter((cookie) => cookie.name === 'jwt')
+					response.cookies.filter(cookie => cookie.name === 'jwt')
 				).toBeDefined()
+				expect(response.cookies.filter(cookie => cookie.httpOnly)).toBeTruthy()
 				expect(
-					response.cookies.filter((cookie) => cookie.httpOnly)
+					response.cookies.filter(cookie => cookie.sameSite === 'None')
 				).toBeTruthy()
-				expect(
-					response.cookies.filter((cookie) => cookie.sameSite === 'None')
-				).toBeTruthy()
-				expect(response.cookies.filter((cookie) => cookie.secure)).toBeTruthy()
+				expect(response.cookies.filter(cookie => cookie.secure)).toBeTruthy()
 			})
 		})
 	})
 
 	describe('refresh', () => {
-		const tokenRefresh = Token.createToken(
-			{
-				id: newUserId,
-				email: newUser.email,
-				access: newUser.access,
-			},
-			'3d'
-		)
 		describe('Route protections', () => {
 			it('should return an error when no token', async () => {
 				const response = await app.inject({
