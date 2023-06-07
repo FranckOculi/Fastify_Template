@@ -1,6 +1,8 @@
 import { registerTeam, registerUser } from './registerService'
 import { findByEmail, removeUser } from '../../../repositories/userRepository'
 import { findByName, removeTeam } from '../../../repositories/teamRepository'
+import { User } from '../../../types/user'
+import { Team } from '../../../types/team'
 
 describe('registerService', () => {
 	const newUser = {
@@ -30,8 +32,8 @@ describe('registerService', () => {
 	}
 
 	beforeEach(async () => {
-		const user = await findByEmail(newUser.email)
-		const team = await findByName(newTeam.name)
+		const user = <User>await findByEmail(newUser.email)
+		const team = <Team>await findByName(newTeam.name)
 
 		if (user) await removeUser(user.id)
 		if (team) await removeTeam(team.id)
