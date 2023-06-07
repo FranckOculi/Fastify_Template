@@ -1,4 +1,3 @@
-import configuration from '../../config/configuration'
 import MigrationsRepository from '../migrations.config/MigrationsRepository'
 import { User } from 'src/types/user'
 
@@ -18,17 +17,17 @@ export const seed = async () => {
 		'createdAt',
 	]
 
-	const userAdmin1: Partial<User> = await repository.findOne({
+	const userAdmin1 = await repository.findOne<User>({
 		where: { email: 'johnwayne@admin.fr' },
 		select: userSafeFields,
 	})
 
 	if (!userAdmin1) {
-		await repository.create<Partial<User>>({
+		await repository.create({
 			teamId: 1,
 			displayName: 'John Wayne',
 			email: 'johnwayne@admin.fr',
-			password: configuration.initial_admin_password,
+			password: 'admin',
 			access: 'admin',
 			phone: '0607080910',
 			createdAt: new Date(),
@@ -36,7 +35,7 @@ export const seed = async () => {
 	}
 
 	if (userAdmin1 && userAdmin1.access !== 'admin') {
-		await repository.update<Partial<User>>(
+		await repository.update(
 			{ id: userAdmin1.id },
 			{
 				access: 'admin',
@@ -47,17 +46,17 @@ export const seed = async () => {
 		)
 	}
 
-	const userAdmin2 = await repository.findOne<Partial<User>>({
+	const userAdmin2 = await repository.findOne<User>({
 		where: { email: 'chouchou@admin.fr' },
 		select: userSafeFields,
 	})
 
 	if (!userAdmin2) {
-		await repository.create<Partial<User>>({
+		await repository.create({
 			teamId: 2,
 			displayName: 'Chouchou Beignet',
 			email: 'chouchou@admin.fr',
-			password: configuration.initial_admin_password,
+			password: 'admin',
 			access: 'admin',
 			phone: '0708091011',
 			createdAt: new Date(),
