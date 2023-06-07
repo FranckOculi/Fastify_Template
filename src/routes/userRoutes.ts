@@ -29,7 +29,9 @@ async function userRoutes(fastify: FastifyInstance) {
 		handler: getSingleUser,
 	})
 
-	fastify.route({
+	fastify.route<{
+		Headers: RequestHeaders
+	}>({
 		method: 'GET',
 		url: '/all',
 		preValidation: tokenVerification,
