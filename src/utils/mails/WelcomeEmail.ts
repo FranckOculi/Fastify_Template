@@ -9,7 +9,8 @@ export default class WelcomeEmail {
 		this.user = user
 	}
 
-	getFrom() {
+	getFrom() {
+
 		return `'Fastify Template <${configuration.mail_user}>'`;
 	}
 
@@ -32,10 +33,11 @@ export default class WelcomeEmail {
 
 	async getEmail() {
 		if (!this.user?.displayName || !this.user?.email)
-			return { error: 'Unable to send an email', status: 503 }
+			return { error: 'Unable to send an email', status: 503, message: null }
 
 		return {
 			error: null,
+			status: null,
 			message: {
 				from: this.getFrom(),
 				to: this.getReceiver(),
