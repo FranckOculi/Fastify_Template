@@ -2,6 +2,9 @@ import { loginService } from './loginService'
 
 import { registerUser } from '../register/registerService'
 import { findByEmail, removeUser } from '../../../repositories/userRepository'
+import { User } from '../../../types/user'
+import { LoginServiceResponse } from './type'
+import { ServiceResponse } from '../../../types/service'
 
 describe('loginService', () => {
 	const user = {
@@ -15,7 +18,6 @@ describe('loginService', () => {
 		displayName: 'fakeUser',
 		email: 'fakeUser@fakeUser.com',
 		password: 'fakePassword',
-		email: 'fakeEmail@fakeEmail.fr',
 	}
 
 	beforeEach(async () => {
@@ -25,7 +27,7 @@ describe('loginService', () => {
 	})
 
 	afterAll(async () => {
-		const userWithId = await findByEmail(user.email)
+		const userWithId = <User>await findByEmail(user.email)
 		await removeUser(userWithId.id)
 	})
 
@@ -47,12 +49,14 @@ describe('loginService', () => {
 	})
 
 	it('should succeed', async () => {
-		const { error, status, data } = await loginService(user)
+		const { error, status, data } = <ServiceResponse<LoginServiceResponse>>(
+			await loginService(user)
+		)
 
 		expect(error).toBeNull()
-		expect(data.user).toBeDefined()
-		expect(data.accessToken).toBeDefined()
-		expect(data.refreshTokenObject.refreshToken).toBeDefined()
-		expect(data.refreshTokenObject.options).toBeDefined()
+		expect(data?.user).toBeDefined()
+		expect(data?.accessToken).toBeDefined()
+		expect(data?.refreshTokenObject.refreshToken).toBeDefined()
+		expect(data?.refreshTokenObject.options).toBeDefined()
 	})
 })
