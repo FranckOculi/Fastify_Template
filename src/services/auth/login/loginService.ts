@@ -60,6 +60,8 @@ export const loginService = async (
 					httpOnly: true,
 					sameSite: 'Strict' as 'strict',
 					secure: true,
+					domain: 'localhost',
+					path: '/',
 					maxAge: 60 * 60 * 24 * 3,
 				},
 			},
