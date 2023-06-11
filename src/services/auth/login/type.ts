@@ -5,6 +5,8 @@ export type TokenObject = {
 		sameSite: 'strict'
 		secure: boolean
 		maxAge: number
+		domain: string
+		path: string
 	}
 }
 
