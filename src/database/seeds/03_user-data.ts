@@ -1,4 +1,6 @@
+import bcrypt from 'bcrypt'
 import MigrationsRepository from '../migrations.config/MigrationsRepository'
+import { initial_user_password } from '../migrations.config/const'
 import { User } from 'src/types/user'
 
 export const seed = async () => {
@@ -17,6 +19,9 @@ export const seed = async () => {
 		'createdAt',
 	]
 
+	const salt = await bcrypt.genSalt()
+	const hash = await bcrypt.hash(initial_user_password, salt)
+
 	const user1 = await repository.findOne<User>({
 		where: { email: 'a@a.com' },
 		select: userSafeFields,
@@ -27,7 +32,7 @@ export const seed = async () => {
 			teamId: 1,
 			displayName: 'John Doe',
 			email: 'a@a.com',
-			password: 'user',
+			password: hash,
 			access: 'manager',
 			createdAt: new Date(),
 		})
@@ -42,7 +47,7 @@ export const seed = async () => {
 			teamId: 2,
 			displayName: 'Jane Doe',
 			email: 'b@b.com',
-			password: 'user',
+			password: hash,
 			access: 'manager',
 			createdAt: new Date(),
 		})
@@ -58,7 +63,7 @@ export const seed = async () => {
 				teamId: 1,
 				displayName: `randomUser${i}_team1`,
 				email: `randomUser${i}@team1.com`,
-				password: 'user',
+				password: hash,
 				createdAt: new Date(),
 			})
 	}
@@ -73,7 +78,7 @@ export const seed = async () => {
 				teamId: 2,
 				displayName: `randomUser${i}_team2`,
 				email: `randomUser${i}@team2.com`,
-				password: 'user',
+				password: hash,
 				createdAt: new Date(),
 			})
 	}
