@@ -1,6 +1,6 @@
 import configuration from '../config/configuration'
 import jwt from 'jsonwebtoken'
-import { Token as TokenType, TokenPayload } from '../types/Token'
+import { Token as TokenType, TokenPayload } from '../types/token'
 
 export default class Token {
 	constructor() {}
