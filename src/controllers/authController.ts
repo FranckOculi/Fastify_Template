@@ -43,16 +43,17 @@ export const login = async (
 		accessToken: data.accessToken,
 	}
 
-	res.cookie(
-		'jwt',
-		data.refreshTokenObject.refreshToken,
-		data.refreshTokenObject.options
-	)
-
-	return res.code(200).send({
-		message: 'Authenticated with success !',
-		data: dataResponse,
-	})
+	return res
+		.setCookie(
+			'jwt',
+			data.refreshTokenObject.refreshToken,
+			data.refreshTokenObject.options
+		)
+		.code(200)
+		.send({
+			message: 'Authenticated with success !',
+			data: dataResponse,
+		})
 }
 
 export const refresh = async (
