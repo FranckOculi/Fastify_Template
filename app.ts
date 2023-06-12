@@ -5,6 +5,7 @@ import cookie from '@fastify/cookie'
 import configuration from './src/config/configuration'
 import authRoutes from './src/routes/authRoutes'
 import userRoutes from './src/routes/userRoutes'
+import oauthRoutes from './src/routes/oauthRoutes'
 
 const app = fastify({
 	logger: configuration.env === 'test' ? false : true,
@@ -12,14 +13,16 @@ const app = fastify({
 
 // cors
 app.register(cors, {
-	origin: true,
+	// origin: true,
+	origin: '*',
+	credentials: true,
 	// origin: configuration.app_url,
 	// allowedHeaders: [
-	//   'Origin',
-	//   'X-Requested-With',
-	//   'Accept',
-	//   'Content-Type',
-	//   'Authorization',
+	// 	'Origin',
+	// 	'X-Requested-With',
+	// 	'Accept',
+	// 	'Content-Type',
+	// 	'Authorization',
 	// ],
 	// methods: ['GET', 'PUT', 'POST', 'DELETE'],
 })
@@ -34,5 +37,6 @@ app.register(cookie, {
 // Routes managers
 app.register(authRoutes, { prefix: '/auth' })
 app.register(userRoutes, { prefix: '/user' })
+app.register(oauthRoutes, { prefix: '/oauth' })
 
 export default app
