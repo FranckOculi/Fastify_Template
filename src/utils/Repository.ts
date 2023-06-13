@@ -1,6 +1,6 @@
 import db from '../database/connection'
-import { Tables } from 'src/types/tables'
-import { Options, Params } from 'src/types/repository'
+import { Tables } from '../types/tables'
+import { Options, Params } from '../types/repository'
 
 export default class Repository {
 	table: keyof typeof Tables
