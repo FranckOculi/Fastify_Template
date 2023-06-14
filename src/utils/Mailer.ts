@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import configuration from '../config/configuration'
-import { Mail } from 'src/types/Mail'
+import { Mail } from '../types/mail'
 
 export default class Mailer {
 	transporter: nodemailer.Transporter
