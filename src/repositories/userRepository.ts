@@ -1,6 +1,6 @@
 import Repository from '../utils/Repository'
 import { User } from '../types/user'
-import { Params } from 'src/types/repository'
+import { Params } from '../types/repository'
 
 const repository = new Repository('users')
 const userSafeFields = [

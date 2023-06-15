@@ -1,10 +1,10 @@
-import { User } from 'src/types/User'
 import {
 	findById,
 	removeUser,
 	updateUser,
 } from '../../../repositories/userRepository'
-import { ServiceResponse } from 'src/types/Service'
+import { ServiceResponse } from '../../../types/service'
+import { User } from '../../../types/user'
 
 export const getUserService = async (
 	id: number

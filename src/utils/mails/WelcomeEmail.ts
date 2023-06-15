@@ -1,5 +1,5 @@
 import configuration from '../../config/configuration'
-import { User } from '../../types/User'
+import { User } from '../../types/user'
 
 export default class WelcomeEmail {
 	static appName = 'template Fastify'
@@ -10,8 +10,7 @@ export default class WelcomeEmail {
 	}
 
 	getFrom() {
-
-		return `'Fastify Template <${configuration.mail_user}>'`;
+		return `'Fastify Template <${configuration.mail_user}>'`
 	}
 
 	getReceiver() {

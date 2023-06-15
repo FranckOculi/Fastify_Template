@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt'
 
 import { findByEmail } from '../../../repositories/userRepository'
 import Token from '../../../utils/Token'
-import { ServiceResponse } from 'src/types/service'
-import { User } from 'src/types/user'
+import { ServiceResponse } from '../../../types/service'
+import { User } from '../../../types/user'
 import { LoginServiceResponse } from './type'
 
 export const loginService = async (

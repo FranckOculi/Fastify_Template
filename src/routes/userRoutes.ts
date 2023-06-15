@@ -13,8 +13,8 @@ import {
 } from '../schemas/userSchema'
 import { tokenVerification } from '../middlewares/authenticationMiddleware'
 import { permissionVerification } from '../middlewares/permissionMiddleware'
-import { User } from 'src/types/user'
-import { RequestHeaders } from 'src/types/request'
+import { User } from '../types/user'
+import { RequestHeaders } from '../types/request'
 
 async function userRoutes(fastify: FastifyInstance) {
 	fastify.route<{

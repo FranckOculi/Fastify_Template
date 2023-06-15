@@ -1,6 +1,6 @@
 import Token from '../../../utils/Token'
-import { ServiceResponse } from 'src/types/service'
-import { TokenPayload } from 'src/types/token'
+import { ServiceResponse } from '../../../types/service'
+import { TokenPayload } from '../../../types/token'
 
 export const refreshTokenService = async (
 	tokenObject: string

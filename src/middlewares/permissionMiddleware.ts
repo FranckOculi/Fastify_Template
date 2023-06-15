@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { RequestHeaders } from 'src/types/request'
+import { RequestHeaders } from '../types/request'
 
 export const permissionVerification = async (
 	req: FastifyRequest<{

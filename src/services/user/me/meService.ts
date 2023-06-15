@@ -1,8 +1,8 @@
 import { findById } from '../../../repositories/userRepository'
 import { findById as findTeamById } from '../../../repositories/teamRepository'
-import { ServiceResponse } from 'src/types/Service'
-import { User } from 'src/types/User'
-import { Team } from 'src/types/Team'
+import { ServiceResponse } from '../../../types/service'
+import { User } from '../../../types/user'
+import { Team } from '../../../types/team'
 
 export const getMeService = async (
 	id: number

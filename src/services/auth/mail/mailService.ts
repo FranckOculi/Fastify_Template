@@ -1,8 +1,8 @@
 import Mailer from '../../../utils/Mailer'
 import WelcomeEmail from '../../../utils/mails/WelcomeEmail'
-import { ServiceResponse } from 'src/types/Service'
-import { Mail } from 'src/types/Mail'
-import { User } from 'src/types/User'
+import { ServiceResponse } from '../../../types/service'
+import { Mail } from '../../../types/mail'
+import { User } from '../../../types/user'
 
 export const sendWelcomeEmail = async (
 	user: Partial<User>

@@ -7,9 +7,9 @@ import {
 } from '../../../repositories/teamRepository'
 import { createUser, findByEmail } from '../../../repositories/userRepository'
 import { sendWelcomeEmail } from '../mail/mailService'
-import { User } from 'src/types/user'
-import { Team } from 'src/types/team'
-import { ServiceResponse } from 'src/types/service'
+import { User } from '../../../types/user'
+import { Team } from '../../../types/team'
+import { ServiceResponse } from '../../../types/service'
 
 export const registerUser = async (
 	data: Partial<User>
@@ -39,9 +39,9 @@ export const registerUser = async (
 	if (error)
 		return {
 			error,
-	 		status,
-	 		data: null,
-	}
+			status,
+			data: null,
+		}
 
 	const response = await findByEmail(newUser.email)
 

@@ -1,7 +1,7 @@
 import knex from 'knex'
 import knexfileMigrations from './knexfile.migrations'
-import { Tables } from 'src/types/tables'
-import { Options, Params } from 'src/types/repository'
+import { Tables } from '../../types/tables'
+import { Options, Params } from '../../types/repository'
 
 const db = knex(knexfileMigrations)
 

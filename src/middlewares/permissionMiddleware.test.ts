@@ -1,9 +1,12 @@
 'use strict'
 
+import { ReplyGenericInterface } from 'fastify/types/reply'
 import app from '../../app'
 import { findByEmail, removeUser } from '../repositories/userRepository'
 import { loginService } from '../services/auth/login/loginService'
 import { registerUser } from '../services/auth/register/registerService'
+import { ServiceResponse } from '../types/service'
+import { LoginServiceResponse } from '../services/auth/login/type'
 
 interface MyReply extends ReplyGenericInterface {
 	message: string
@@ -61,7 +64,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + userToken },
 		})
 
-		const body : MyReply = JSON.parse(response.body)
+		const body: MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('Error token')
 		expect(response.statusCode).toEqual(401)
 	})
@@ -73,7 +76,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + adminToken },
 		})
 
-		const body : MyReply = JSON.parse(response.body)
+		const body: MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('User data')
 		expect(body.data.id).toEqual(randomId)
 	})
@@ -85,7 +88,7 @@ describe('authenticationMiddleware', () => {
 			headers: { authorization: 'Bearer ' + userToken },
 		})
 
-		const body : MyReply = JSON.parse(response.body)
+		const body: MyReply = JSON.parse(response.body)
 		expect(body.message).toEqual('User data')
 		expect(body.data.id).toEqual(userId)
 	})

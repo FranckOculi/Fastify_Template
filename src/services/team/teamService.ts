@@ -1,14 +1,14 @@
-import { createTeam } from "../../repositories/teamRepository";
-import { ServiceResponse } from "src/types/Service";
-import { Team } from "src/types/Team";
+import { createTeam } from '../../repositories/teamRepository'
+import { ServiceResponse } from '../../types/service'
+import { Team } from '../../types/team'
 
 export const createTeamService = async (
-  data: Partial<Team>
+	data: Partial<Team>
 ): Promise<ServiceResponse<Partial<Team>>> => {
-  data.createdAt = new Date();
-  data.updatedAt = new Date();
+	data.createdAt = new Date()
+	data.updatedAt = new Date()
 
-  const response = await createTeam(data);
+	const response = await createTeam(data)
 
-  return { error: null, status: null, data: response };
-};
+	return { error: null, status: null, data: response }
+}

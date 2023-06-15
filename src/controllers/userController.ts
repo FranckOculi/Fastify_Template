@@ -6,8 +6,8 @@ import {
 	updateUserService,
 } from '../services/user/single/singleService'
 import { getMeService } from '../services/user/me/meService'
-import { User } from 'src/types/user'
-import { RequestHeaders } from 'src/types/request'
+import { User } from '../types/user'
+import { RequestHeaders } from '../types/request'
 
 export const getSingleUser = async (
 	req: FastifyRequest<{
