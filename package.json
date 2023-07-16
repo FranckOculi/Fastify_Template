@@ -19,6 +19,7 @@
 	"author": "chouchoubeignet",
 	"license": "ISC",
 	"dependencies": {
+		"@azure/msal-node": "^1.17.3",
 		"@fastify/cookie": "^8.3.0",
 		"@fastify/cors": "^8.2.1",
 		"bcrypt": "^5.1.0",
