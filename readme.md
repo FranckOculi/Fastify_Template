@@ -9,6 +9,7 @@ A backend starter repository.
 - Node.js
 - Fastify
 - Sqlite
+- Docker
 
 ## Installation
 
